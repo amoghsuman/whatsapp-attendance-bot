@@ -12,8 +12,12 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
 client = gspread.authorize(creds)
 sheet = client.open("Attendance Sheet").sheet1
 
-@app.route("/bot", methods=["POST"])
+@app.route("/bot", methods=["GET", "POST"])
 def bot():
+    if request.method == "GET":
+        return "👋 This endpoint is for POST requests only (used by Twilio)."
+    
+    # POST logic
     incoming_msg = request.values.get("Body", "").strip()
     from_number = request.values.get("From", "")
     resp = MessagingResponse()
